@@ -34,7 +34,7 @@ Este proyecto escolar fue desarrollado por Fernando Hernandez Valverde para la m
 
 -- INSTALACION --
 
-  - Puede descargar el apk del repositorio de github: https://github.com/Fernandohhh123/TaskMaster
+  - Puede descargar el apk "app-debug.apk" del repositorio de github: https://github.com/Fernandohhh123/TaskMaster
     - Instalelo como un apk cualquiera
 
   - Puede clonar el repositorio de github: https://github.com/Fernandohhh123/TaskMaster.git
