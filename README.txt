@@ -9,6 +9,7 @@
 |									|
 -------------------------------------------------------------------------
 
+Version 0.2
 
 -- DESCRIPCION --
 
@@ -45,20 +46,20 @@ Este proyecto escolar fue desarrollado por Fernando Hernandez Valverde para la m
 -- MODO DE USO --
   - Pasos para agregar una tarea:
       1.- Presione el boton verde "+ Nueva tarea" ubicado en la esquina superior derecha de la pantalla.
-      2.- Se abrira una pequeña ventanita (formulario) que unicamente tiene un campo el cual es el titulo
+      2.- Se abrira una pequeña ventanita (formulario) debera llenar los campos de Titulo, Fecha y hora para realizar la tarea
            de la tarea (puede ser un titulo o un texto cualquiera que desee el usuario).
-      3.- Una vez lleno el campo de texto (Titulo) presione el boton "Aceptar" ubicado en la esquina inferior derecha de la ventana
+      3.- Una vez llenados los campos presione el boton "Aceptar" ubicado en la esquina inferior derecha de la ventana
            de dialogo que se abrio al presionar el boton "+ Nueva tarea".
       4.- En caso de que no quiera agregar una tarea nueva puede presionar el boton "Cancelar" ubicado en la esquina inferior izquierda
            de la ventanita.
 
-  - Como actualizar el titulo de una tarea:
-    1.- Presione el icono del lapiz qe esta a lado del boton borrar.
+  - Como actualizar los datos de una tarea:
+    1.- Presione el icono del lapiz que esta a lado del boton borrar.
     2.- Se abrira una ventana de dialog parecida a la de agregar tarea
-    3.- Escriba el nuevo titulo y presione el boton de aceptar
-    4.- La tarea tendra un titulo actualizado
+    3.- Actualice los datos que desee y presione el boton de aceptar
+    4.- La tarea tendra sus datos actualizados
         - si no quiere actualizar el titulo solo presione el boton de "Cancelar"
 
   - Como borrar una tarea:
       1.- Simplemente toque el boton rojo ubicado en la parte derecha de la tarea que desee eliminar "x"
-          (La tarea se borrara sin preguntarle al usuario previamente :P).
+           se abrira un cuadro de dialogo que preguntara si quiere borrar la tarea.
