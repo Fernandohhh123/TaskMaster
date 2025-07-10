@@ -63,3 +63,7 @@ Este proyecto escolar fue desarrollado por Fernando Hernandez Valverde para la m
   - Como borrar una tarea:
       1.- Simplemente toque el boton rojo ubicado en la parte derecha de la tarea que desee eliminar "x"
            se abrira un cuadro de dialogo que preguntara si quiere borrar la tarea.
+
+
+Este proyecto esta hecho con fines academicos, no hay contacto con el desarrollador porque no hay intencion de modificarlo, mejorarlo
+ o escalarlo mas alla de los requerimientos del profesor de la materia.
