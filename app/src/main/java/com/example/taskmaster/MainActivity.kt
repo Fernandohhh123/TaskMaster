@@ -111,6 +111,8 @@ fun DefaultPreview() {
 data class Task(
     val id: Int,
     val title: String,
+    val date: String = "",
+    val time: String = "",
     var isCompleted: Boolean = false
 )
 
@@ -124,8 +126,15 @@ fun TaskMasterApp() {
     var taskCounter by remember { mutableStateOf(1) }
     var showDialog by remember { mutableStateOf(false) }
     var newTaskTitle by remember { mutableStateOf("") }
+    var newTaskDate by remember { mutableStateOf("") }
+    var newTaskTime by remember { mutableStateOf("") }
     var editingTask by remember { mutableStateOf<Task?>(null) }
     var editedTaskTitle by remember { mutableStateOf("") }
+    var editedTaskDate by remember { mutableStateOf("") }
+    var editedTaskTime by remember { mutableStateOf("") }
+    var taskToDelete by remember { mutableStateOf<Task?>(null) }
+
+
 
 
     Scaffold(
@@ -187,7 +196,11 @@ fun TaskMasterApp() {
                     fontSize = 18.sp,
                     color = Color.Gray
                 )
+                //------------------------------------------------------
             } else {
+
+
+
                 // columna para mostrar las tareas en caso de que haya una o mas
                 LazyColumn(
                     modifier = Modifier
@@ -206,12 +219,15 @@ fun TaskMasterApp() {
                                 }
                             },
                             onDeleteTask = {
-                                tasks = tasks.filter { it.id != task.id }
+                                taskToDelete = task
                             },
                             onEditTask = {
                                 editingTask = task
                                 editedTaskTitle = task.title
+                                editedTaskDate = task.date
+                                editedTaskTime = task.time
                             }
+
                         )
 
                         Divider(color = Color.LightGray, thickness = 1.dp)
@@ -252,6 +268,27 @@ fun TaskMasterApp() {
                                 singleLine = true
                             )
 
+                            OutlinedTextField(
+                                value = newTaskDate,
+                                onValueChange = { newTaskDate = it },
+                                label = { Text("Fecha (ej: 10/07/2025)") },
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            OutlinedTextField(
+                                value = newTaskTime,
+                                onValueChange = { newTaskTime = it },
+                                label = { Text("Hora (ej: 14:30)") },
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+
                             // espacio en blanco
                             Spacer(modifier = Modifier.height(16.dp))
 
@@ -280,12 +317,17 @@ fun TaskMasterApp() {
                                         if (newTaskTitle.isNotBlank()) {
                                             tasks = tasks + Task(
                                                 id = taskCounter,
-                                                title = newTaskTitle
+                                                title = newTaskTitle,
+                                                date = newTaskDate,
+                                                time = newTaskTime
                                             )
                                             taskCounter++
                                             newTaskTitle = ""
+                                            newTaskDate = ""
+                                            newTaskTime = ""
                                             showDialog = false
                                         }
+
                                     },
                                     enabled = newTaskTitle.isNotBlank()
                                 ) {
@@ -327,6 +369,25 @@ fun TaskMasterApp() {
                                 singleLine = true
                             )
 
+                            //fecha y hora--------------------------------------
+                            OutlinedTextField(
+                                value = editedTaskDate,
+                                onValueChange = { editedTaskDate = it },
+                                label = { Text("Fecha (ej: 10/07/2025)") },
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            OutlinedTextField(
+                                value = editedTaskTime,
+                                onValueChange = { editedTaskTime = it },
+                                label = { Text("Hora (ej: 14:30)") },
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true
+                            )
+
                             Spacer(modifier = Modifier.height(16.dp))
 
                             // fila para ordenar los botones
@@ -349,7 +410,12 @@ fun TaskMasterApp() {
                                         if (editedTaskTitle.isNotBlank()) {
                                             tasks = tasks.map {
                                                 if (it.id == editingTask!!.id)
-                                                    it.copy(title = editedTaskTitle)
+                                                    it.copy(
+                                                        title = editedTaskTitle,
+                                                        date = editedTaskDate,
+                                                        time = editedTaskTime
+                                                    )
+
                                                 else it
                                             }
                                             editingTask = null
@@ -364,6 +430,49 @@ fun TaskMasterApp() {
                     }
                 } //cuadro de dialogo para actualizar la tarea
             } // if editingTask
+
+            if (taskToDelete != null) {
+                Dialog(onDismissRequest = { taskToDelete = null }) {
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier
+                            .width(280.dp)
+                            .wrapContentHeight()
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "¿Eliminar tarea?",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Text(
+                                text = "¿Estás seguro de que deseas eliminar la tarea \"${taskToDelete!!.title}\"?",
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            )
+                            Row(
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                TextButton(onClick = { taskToDelete = null }) {
+                                    Text("Cancelar")
+                                }
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Button(
+                                    onClick = {
+                                        tasks = tasks.filter { it.id != taskToDelete!!.id }
+                                        taskToDelete = null
+                                    },
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                                ) {
+                                    Text("Eliminar", color = Color.White)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
 
         } // Box para mostrar las tareas-----------------------------------------------------------
     } // scalfold----------------------------------------------------------------------------------
@@ -407,24 +516,28 @@ fun TaskItem(
             modifier = Modifier.padding(end = 8.dp)
         ) // checkbox para marcar la tarea como completada
 
-        // texto para mostrar el titulo de la tarea
-        Text(
-            text = task.title,
+
+        Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 8.dp),
-            fontSize = 18.sp,
+                .padding(end = 8.dp)
+        ) {
+            Text(
+                text = task.title,
+                fontSize = 18.sp,
+                fontWeight = if (task.isCompleted) FontWeight.Normal else FontWeight.Medium,
+                color = if (task.isCompleted) Color.Gray else MaterialTheme.colorScheme.onBackground,
+                textDecoration = if (task.isCompleted) TextDecoration.LineThrough else TextDecoration.None
+            )
+            if (task.date.isNotBlank() || task.time.isNotBlank()) {
+                Text(
+                    text = "${task.date} ${task.time}".trim(),
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            }
+        }
 
-            // esto hace que el color del cuadrado que muestra la tarea cambie de color al
-            //   marchar el checkbox
-            color = if (task.isCompleted) Color.Gray else MaterialTheme.colorScheme.onBackground,
-
-            // cambia el grosor del texto a mas delgado cuando se marca el checkbox
-            fontWeight = if (task.isCompleted) FontWeight.Normal else FontWeight.Medium,
-
-            // se tacha la tarea cuando se marcka el checkbox
-            textDecoration = if(task.isCompleted) TextDecoration.LineThrough else TextDecoration.None
-        ) // texto que muestra el titulo de la tarea
 
         //boton para actualizar el titulo de la tarea
         IconButton(
@@ -452,3 +565,4 @@ fun TaskItem(
         } // boton para borrar la tarea-------------------------------------------------------------
     } // row para los elementos de las tareas ------------------------------------------------------
 } // fun TaskItem-----------------------------------------------------------------------------------
+
